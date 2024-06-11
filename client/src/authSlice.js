@@ -7,18 +7,17 @@ export const login = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await axios.post('https://vineetpersonal.site:5000/api/auth/login', { email, password });
-      localStorage.setItem('token',response.data.token);
-      console.log(response.data.token);
+      localStorage.setItem('token', response.data.token);
       return response.data;
-      
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+
 const initialState = {
-  token: null,
+  token: localStorage.getItem('token') || null,
   user: null,
   loading: false,
   error: null,
@@ -31,6 +30,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.token = null;
       state.user = null;
+      localStorage.removeItem('token'); 
     },
   },
   extraReducers: (builder) => {

@@ -13,7 +13,7 @@ const Register = () => {
 
     const handleRegister = async () => {
         try {
-            await axios.post('http://vineetpersonal.site:5000/api/auth/register', { username, email, password });
+            await axios.post('https://vineetpersonal.site:5000/api/auth/register', { username, email, password });
             toast.success('Registration successful');
             navigate('/login');
         } catch (error) {

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button, Typography, Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { setBetAmount, setBetOption, rollDice, fetchPointsById, updatePoints } from './gameSlice';
+import { setBetAmount, setBetOption, rollDice, fetchPointsById, updatePoints, resetGame } from './gameSlice'; // Import resetGame action
+import { logout } from './authSlice'; 
 import Confetti from 'react-confetti';
 import './Game.css';
 import image1 from "./images/dice-01.svg";
@@ -36,7 +37,7 @@ const Game = () => {
       alert("You need to be logged in to place a bet.");
       return;
     }
-    dispatch(rollDice({ betAmount, betOption, userId, token }));
+    dispatch(rollDice({ betAmount, betOption, userId }));
   };
 
   useEffect(() => {
@@ -55,19 +56,22 @@ const Game = () => {
     }
   }, [message]);
 
-  
   useEffect(() => {
     if (token && userId) {
-      dispatch(fetchPointsById({ userId, token }));
+      dispatch(fetchPointsById({ userId }));
     }
   }, [token, userId, dispatch]);
 
-  
   useEffect(() => {
     if (points === null && token && userId) {
-      dispatch(updatePoints({ userId, points: 5000, token }));
+      dispatch(updatePoints({ userId, points: 5000 }));
     }
   }, [points, token, userId, dispatch]);
+
+  const handleLogout = () => {
+    dispatch(resetGame());
+    dispatch(logout());
+  };
 
   return (
     <div style={{ position: 'relative' }}>
@@ -218,6 +222,20 @@ const Game = () => {
             </Typography>
           </Box>
         )}
+        <Box mt={2}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleLogout}
+            sx={{
+              fontSize: { xs: '0.875rem', md: '1rem' },
+              py: 1,
+              width: 'auto',
+            }}
+          >
+            LOGOUT
+          </Button>
+        </Box>
       </Container>
     </div>
   );

@@ -3,12 +3,11 @@ import axios from 'axios';
 
 
 const getToken = () => localStorage.getItem('token');
-console.log(getToken());
+
 export const fetchPointsById = createAsyncThunk(
   'game/fetchPointsById',
   async ({ userId }, { rejectWithValue }) => {
     const token = getToken();
-    console.log(token)
     try {
       const response = await axios.get(`https://vineetpersonal.site:5000/api/users/${userId}/points`, {
         headers: { Authorization: `Bearer ${token}` }
@@ -54,24 +53,35 @@ export const updatePoints = createAsyncThunk(
   }
 );
 
+const initialState = {
+  points: null,
+  diceResult: null,
+  message: '',
+  betAmount: '',
+  betOption: '',
+  loading: false,
+  error: null,
+};
+
 const gameSlice = createSlice({
   name: 'game',
-  initialState: {
-    points: null,
-    diceResult: null,
-    message: '',
-    betAmount: '',
-    betOption: '',
-    loading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     setBetAmount(state, action) {
       state.betAmount = action.payload;
     },
     setBetOption(state, action) {
       state.betOption = action.payload;
-    }
+    },
+    resetGame(state) {
+      state.points = null;
+      state.diceResult = null;
+      state.message = '';
+      state.betAmount = '';
+      state.betOption = '';
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -106,6 +116,6 @@ const gameSlice = createSlice({
   },
 });
 
-export const { setBetAmount, setBetOption } = gameSlice.actions;
+export const { setBetAmount, setBetOption, resetGame } = gameSlice.actions;
 
 export default gameSlice.reducer;
