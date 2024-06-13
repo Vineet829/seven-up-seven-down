@@ -15,6 +15,7 @@ const Register = () => {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
+<<<<<<< HEAD
         try {
             await dispatch(register({ username, email, password })).unwrap();
             toast.success('Registration successful');
@@ -22,6 +23,13 @@ const Register = () => {
         } catch (err) {
             toast.error(err || 'Registration failed');
         }
+=======
+        
+            await axios.post('https://vineetpersonal.site:5000/api/auth/register', { username, email, password });
+            toast.success('Registration successful');
+            navigate('/login');
+        
+>>>>>>> 41ac1b3b77dee38fcbd3098ac44898c8833e008a
     };
 
     useEffect(() => {
