@@ -1,25 +1,34 @@
-import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Box, Paper, Link } from '@mui/material';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Container, TextField, Button, Typography, Box, Paper } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { register } from './authSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector((state) => state.auth);
     const navigate = useNavigate();
 
     const handleRegister = async () => {
         try {
-            await axios.post('https://vineetpersonal.site:5000/api/auth/register', { username, email, password });
+            await dispatch(register({ username, email, password })).unwrap();
             toast.success('Registration successful');
             navigate('/login');
-        } catch (error) {
-            toast.error('Registration failed');
+        } catch (err) {
+            toast.error(err || 'Registration failed');
         }
     };
+
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+        }
+    }, [error]);
 
     return (
         <Container 
@@ -93,15 +102,25 @@ const Register = () => {
                         color="secondary"
                         onClick={handleRegister}
                         fullWidth
+                        disabled={loading}
                         sx={{ mt: 2, py: 1.5, fontSize: '1.1rem' }}
                     >
-                        Register
+                        {loading ? 'Registering...' : 'Register'}
                     </Button>
+                    {error && (
+                        <Typography
+                            variant="body1"
+                            color="error"
+                            sx={{ mt: 2, textAlign: 'center' }}
+                        >
+                            {error}
+                        </Typography>
+                    )}
                     <Typography 
                         variant="body2" 
                         sx={{ mt: 2, textAlign: 'center' }}
                     >
-                        Already have an account? <Link href="/login">Login here</Link>
+                        Already have an account? <Link to="/login">Login here</Link>
                     </Typography>
                 </Box>
             </Paper>

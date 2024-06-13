@@ -8,6 +8,7 @@ export const fetchPointsById = createAsyncThunk(
   'game/fetchPointsById',
   async ({ userId }, { rejectWithValue }) => {
     const token = getToken();
+    console.log(token)
     try {
       const response = await axios.get(`https://vineetpersonal.site:5000/api/users/${userId}/points`, {
         headers: { Authorization: `Bearer ${token}` }

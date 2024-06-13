@@ -7,7 +7,7 @@ export const rollDice = createAsyncThunk(
   async ({ betAmount, betOption, token }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/game/roll',
+        'https://vineetpersonal.site:5000/api/game/roll',
         { betAmount, betOption },
         {
           headers: {

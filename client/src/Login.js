@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, TextField, Button, Typography, Box, Paper } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
@@ -10,7 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading, error, token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -19,9 +19,15 @@ const Login = () => {
       toast.success('Login successful');
       navigate('/game');
     } catch (err) {
-      toast.error('Login failed');
+      toast.error(err || 'Login failed');
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate('/game');
+    }
+  }, [token, navigate]);
 
   return (
     <Container 

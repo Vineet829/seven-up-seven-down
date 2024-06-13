@@ -24,44 +24,12 @@ const UserSchema = new mongoose.Schema({
     default: 5000,
   },
 }, {
-  timestamps: true, 
+  timestamps: true,
 });
 
 
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
 
 
-UserSchema.methods.comparePassword = async function (enteredPassword) {
-  return bcrypt.compare(enteredPassword, this.password);
-};
-
-
-UserSchema.pre('findOneAndUpdate', async function (next) {
-  const update = this.getUpdate();
-  
-  if (update.password) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      update.password = await bcrypt.hash(update.password, salt);
-    } catch (err) {
-      return next(err);
-    }
-  }
-  
-  next();
-});
 
 const User = mongoose.model('User', UserSchema);
 
