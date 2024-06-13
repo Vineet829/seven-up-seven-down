@@ -16,9 +16,7 @@ const Register = () => {
             await axios.post('https://vineetpersonal.site:5000/api/auth/register', { username, email, password });
             toast.success('Registration successful');
             navigate('/login');
-        } catch (error) {
-            toast.error('Registration failed');
-        }
+        } 
     };
 
     return (
