@@ -12,11 +12,11 @@ const Register = () => {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
-        try {
+        
             await axios.post('https://vineetpersonal.site:5000/api/auth/register', { username, email, password });
             toast.success('Registration successful');
             navigate('/login');
-        } 
+        
     };
 
     return (
