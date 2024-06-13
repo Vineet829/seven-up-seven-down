@@ -20,7 +20,7 @@ export const register = createAsyncThunk(
   'auth/register',
   async ({ username, email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://vineetpersonal:5000/api/auth/register', { username, email, password });
+      const response = await axios.post('https://vineetpersonal.site:5000/api/auth/register', { username, email, password });
       localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error) {
